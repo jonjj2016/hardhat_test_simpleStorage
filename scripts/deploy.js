@@ -29,14 +29,23 @@
 //   console.error(error);
 //   process.exitCode = 1;
 // });
-const main = async () => {}
+const { ethers } = require('hardhat')
+
+const main = async () => {
+  const SimpleStorageFactory = await ethers.getContractFactory('SimpleStorage')
+  console.log('Deploying Contract')
+  const simpleStorage = await SimpleStorageFactory.deploy()
+  await simpleStorage.deployed()
+  console.log(`SimpleStorage deployed to ${simpleStorage.address}`)
+}
 
 const deploy = async () => {
   try {
-    const res = await main()
+    await main()
     process.exit(0)
   } catch (error) {
     console.log(error)
     process.exit(1)
   }
 }
+deploy()

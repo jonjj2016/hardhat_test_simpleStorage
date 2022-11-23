@@ -8,6 +8,7 @@
     "deploy_goerli": "npx hardhat run scripts/deploy.js --network goerli",
     "localhost": "npx hardhat run scripts/deploy.js --network localhost",
     "local_node": "npx hardhat node",
+    "console": "npx hardhat console --network localhost",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

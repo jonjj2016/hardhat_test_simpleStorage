@@ -26,20 +26,41 @@
 //   console.error(error);
 //   process.exitCode = 1;
 // });
-const { ethers } = require('hardhat')
+const { ethers, run, network } = require('hardhat')
+require('dotenv').config()
 
+const verify = async (contractAddress, args) => {
+  console.log('Verifying Contract')
+  try {
+    await run('verify:verify', {
+      address: contractAddress,
+      constructorArguments: args,
+    })
+  } catch (error) {
+    if (error.message.toLowerCase().includes('already verified')) {
+      console.log('Already Verified')
+    } else {
+      console.log(error)
+    }
+  }
+}
 const main = async () => {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000)
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS
-
   const SimpleStorageFactory = await ethers.getContractFactory('SimpleStorage')
   console.log('Deploying Contract')
   const simpleStorage = await SimpleStorageFactory.deploy()
   await simpleStorage.deployed()
-  console.log(
-    `SimpleStorage deployed to ${simpleStorage.address} unlock timestamp ${unlockTime} `,
-  )
+  console.log(`SimpleStorage deployed to ${simpleStorage.address} `)
+  if (network.config.chainId == 5 && process.env.ETHERSCAN_API_KEY) {
+    // as we need some time so etherscan can identify if there is a transaction
+    await simpleStorage.deployTransaction.wait(6)
+    await verify(simpleStorage.address, [])
+  }
+  const currentValue = await simpleStorage.retrieve()
+  console.log(`Current Value is ${currentValue}`)
+  const transactionResponse = await simpleStorage.store(7)
+  await transactionResponse.wait(1)
+  const updatedValue = await simpleStorage.retrieve()
+  console.log(`Current value has updated to ${updatedValue}`)
 }
 
 const deploy = async () => {

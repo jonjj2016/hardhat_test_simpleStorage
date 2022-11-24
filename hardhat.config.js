@@ -3,6 +3,7 @@ require('@nomicfoundation/hardhat-toolbox')
 require('dotenv').config()
 require('@nomiclabs/hardhat-etherscan')
 require('./tasks/block-number')
+require('solidity-coverage')
 /** @type import('hardhat/config').HardhatUserConfig */
 const GOERLI_IPS_URL = process.env.GOERLI_IPS_URL || 'https://eth-rinkeby'
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '0xkey'

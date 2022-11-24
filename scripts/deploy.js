@@ -51,8 +51,9 @@ const main = async () => {
   await simpleStorage.deployed()
   console.log(`SimpleStorage deployed to ${simpleStorage.address} `)
   if (network.config.chainId == 5 && process.env.ETHERSCAN_API_KEY) {
+    console.log('Verifying contract')
     // as we need some time so etherscan can identify if there is a transaction
-    await simpleStorage.deployTransaction.wait(6)
+    await simpleStorage.deployTransaction.wait(26)
     await verify(simpleStorage.address, [])
   }
   const currentValue = await simpleStorage.retrieve()

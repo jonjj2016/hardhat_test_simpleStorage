@@ -1,8 +1,8 @@
+require('hardhat-gas-reporter')
 require('@nomicfoundation/hardhat-toolbox')
 require('dotenv').config()
 require('@nomiclabs/hardhat-etherscan')
 require('./tasks/block-number')
-
 /** @type import('hardhat/config').HardhatUserConfig */
 const GOERLI_IPS_URL = process.env.GOERLI_IPS_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
@@ -23,5 +23,8 @@ module.exports = {
       url: 'http://127.0.0.1:8545/',
       chainId: 31337,
     },
+  },
+  gasReporter: {
+    enabled: true,
   },
 }
